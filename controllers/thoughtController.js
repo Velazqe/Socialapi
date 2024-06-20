@@ -50,7 +50,7 @@ module.exports = {
       return res.status(400).json({ message: 'Invalid thought ID format' });
     }
     
-    Thought.findOneAndRemove({ _id: req.params.thoughtId })
+    Thought.findByIdAndDelete(req.params.thoughtId)
       .then((thought) => (!thought ? res.status(404).json({ message: 'No thought with this id!' }) : User.findOneAndUpdate(
         { thoughts: req.params.thoughtId },
         { $pull: { thoughts: req.params.thoughtId } },

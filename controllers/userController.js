@@ -28,7 +28,7 @@ module.exports = {
       })
       .catch((err) => {
         console.error('Error occurred while fetching user:', err);
-        return res.status(500).json(err);
+        return res.status(500).json({ message: 'An error occurred while fetching user', error: err });
       });
   },
   createUser(req, res) {
@@ -54,7 +54,7 @@ module.exports = {
       return res.status(400).json({ message: 'Invalid user ID format' });
     }
     
-    User.findOneAndRemove({ _id: req.params.userId })
+    User.findByIdAndDelete({ _id: req.params.userId })
       .then((user) => (!user ? res.status(404).json({ message: 'No user with this id!' }) : Thought.deleteMany({ _id: { $in: user.thoughts } })))
       .then(() => res.json({ message: 'User and associated thoughts deleted!' }))
       .catch((err) => res.status(500).json(err));
